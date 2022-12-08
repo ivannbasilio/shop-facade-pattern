@@ -1,0 +1,35 @@
+<div class="grid grid-cols-12 gap-1 relative">
+    <ng-container *ngIf="(products$ | async) as products; else elseLoadingProducts">
+        <div class="col-span-4" *ngFor="let product of products">
+            <div class="card card-compact w-72 bg-base-100 shadow-none 
+                transition-shadow hover:transition-shadow hover:shadow-xl m-4">
+                <figure>
+                    <img [src]="product.image" [alt]="product.name" />
+                </figure>
+                <div class="card-body">
+                  <h2 class="card-title">{{ product.name}}</h2>
+                  <h4>
+                    <strong class="text-primary">{{ product.price | currency: 'BRL' }}</strong>
+                  </h4>
+                  <p>
+                    ou até 10x de
+                    <strong>
+                        {{ roundValue(product.price / 10) | currency: 'BRL' }}
+                    </strong>
+                  </p>
+                  <div class="card-actions justify-end">
+                    <ng-container *ngIf="!product.selected; else removeButtonElse">
+                        <button class="btn btn-primary" (click)="addToCart(product)">Add to cart</button>
+                    </ng-container>
+                    <ng-template #removeButtonElse>
+                        <button class="btn btn-secondary" (click)="removeFromCart(product)">Remove from cart</button>
+                    </ng-template>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #elseLoadingProducts>
+        <button class="btn btn-ghost btn-lg enabled loading absolute left-2/4 top-56"></button>
+    </ng-template>
+</div>

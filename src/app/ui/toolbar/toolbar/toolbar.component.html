@@ -1,0 +1,109 @@
+<div class="navbar my-6 w-3/4 m-auto relative">
+    <div class="flex-1 px-2 lg:flex-none text-right">
+      <a class="text-lg font-bold">Chemtech Shop</a>
+    </div> 
+    <div class="flex justify-center flex-1 px-2">
+        <input type="text" 
+            placeholder="Busque os melhores tênis" 
+            class="input w-full max-w-xs bg-gray-100" />
+    </div>
+    <div class="flex justify-end px-2 ">
+      <div class="flex items-stretch">
+        <a class="btn btn-ghost rounded-btn">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </a>
+        <div class="dropdown dropdown-end">
+          <a tabindex="0" class="btn btn-ghost rounded-btn">
+            <svg class="items-center inline-flex w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+            <ng-container *ngIf="(cart$ | async) as products">
+                <span 
+                    class="items-center inline-flex badge badge-secondary"
+                    *ngIf="products.length > 0">
+                    {{ products.length }}
+                </span>
+            </ng-container>
+          </a>
+          <ul tabindex="0" 
+              *ngIf="(cart$ | async) as products"
+              class="menu dropdown-content p-4 shadow-xl bg-base-100 rounded-box w-96 mt-4 border-2">
+            <ng-container *ngIf="products.length == 0; else elseEmptyProducts">
+                <div class="text-center">
+                    <span class="font-semibold block">Seu carrinho está vazio =/</span>
+                    <span class="text-slate-500 text-sm">Mas você pode mudar isso agora...</span>
+                </div>
+            </ng-container>
+            <ng-template #elseEmptyProducts>
+                <ng-container *ngFor="let product of (cart$ | async)">
+                    <li>
+                        <div class="grid grid-cols-12">
+                            <div class="col-span-2">
+                                <div class="avatar">
+                                    <div class="w-16 rounded">
+                                      <img [src]="product.image" [alt]="product.name " />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-8 text-left pl-8">
+                                <strong>{{ product.name }}</strong> <br>
+                                <strong class="text-primary">
+                                    {{ product.price | currency: 'BRL' }}
+                                </strong>
+                            </div>
+                        </div>
+                    </li>
+                </ng-container>
+                <div *ngIf="(cart$ | async) as products" class="p-4 text-left mt-6">
+                    Total: <b>{{ computeTotal(products) | currency: 'BRL' }}</b>
+                </div>
+                <div *ngIf="(cart$ | async)">
+                    <label for="my-modal" class="btn btn-success text-white hover:bg-opacity-80 w-full"
+                        >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Checkout
+                </label>
+                    <button class="btn btn-ghost w-full mt-2"(click)="clearCheckout()">
+                        Limpar carrinho
+                    </button>
+                </div>
+            </ng-template>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="absolute z-50 bg-gray-200 p-4 top-full right-1 w-full"
+        *ngIf="(results$ | async) as resultados">
+        <ul tabindex="0" class="menu dropdown-content p-2 shadow-xl bg-base-100 rounded-box w-72 mt-4">
+            <ng-container *ngFor="let product of resultados">
+                <li>
+                    <div class="grid grid-cols-12">
+                        <div class="col-span-2">
+                            <div class="avatar">
+                                <div class="w-16 rounded">
+                                  <img [src]="product.image" [alt]="product.name " />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-span-8 text-left pl-8">
+                            <strong>{{ product.name }}</strong> <br>
+                            <strong class="text-primary">
+                                {{ product.price | currency: 'BRL' }}
+                            </strong>
+                        </div>
+                    </div>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+  </div>
+  <input type="checkbox" id="my-modal" class="modal-toggle" />
+  <div class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Que ótimo! Estamos quase lá</h3>
+        <p class="py-4">Você deseja finalizar essa compra utilizando os dados da conta de <strong>Ivan Sousa</strong>? </p>
+        <div class="modal-action">
+            <label for="my-modal" class="btn btn-ghost">Não, mudar de conta</label>
+            <label for="my-modal" class="btn btn-success text-white hover:bg-opacity-80">Sim</label>
+        </div>
+    </div>
+  </div>
+

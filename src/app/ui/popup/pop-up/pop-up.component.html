@@ -1,0 +1,13 @@
+<ng-container *ngIf="(cart$ | async) as cart">
+    <div class="card w-96 bg-secondary text-neutral-content fixed left-32 bottom-4 z-50"
+        *ngIf="cart.length > 0">
+        <div class="card-body items-center text-center">
+        <h2 class="card-title">Hiii man, tranquilo?</h2>
+        <p>Você pode zerar seu carrinho por aqui!</p>
+        <div class="card-actions justify-end">
+            <button class="btn btn-primary" (click)="clearCart()">Certo, zerar</button>
+            <button class="btn btn-ghost">Não</button>
+        </div>
+        </div>
+    </div>
+</ng-container>
